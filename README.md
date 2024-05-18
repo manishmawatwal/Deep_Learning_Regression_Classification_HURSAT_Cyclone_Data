@@ -1,41 +1,18 @@
 # Deep Learning Regression and Classification of Tropical Cyclones based on HURSAT data
 
 ## Abstract
-This study focuses on the application of Convolutional
-Neural Network (CNN) models for cyclone intensity estimation
-and classification. Cyclones are one of the most
-devastating natural disasters that cause significant loss of
-life and property damage. Accurate and timely estimation
-and classification of cyclones can help in effective disaster
-management and mitigation. In this study, a CNN
-Lenet architecture is used for classification and a proposed
-CNN model is used for intensity estimation of cyclone
-satellite images. The method involves pre-processing the
-data, training the models on the dataset, and evaluating
-the model’s performance. The results demonstrate that the
-models achieve high accuracy in cyclone classification and
-low Root Mean Square Error (RMSE) in cyclone intensity
-estimation. This study provides insights into the potential
-of CNN architecture, which can be beneficial in enhancing
+This study focuses on the application of Convolutional Neural Network (CNN) models for cyclone intensity estimation and classification. Cyclones are one of the most devastating natural disasters that cause significant loss of life and property damage. Accurate and timely estimation and classification of cyclones can help in effective disaster management and mitigation. In this study, a CNN Lenet architecture is used for classification and a proposed CNN model is used for intensity estimation of cyclone satellite images. The method involves pre-processing the data, training the models on the dataset, and evaluating the model’s performance. The results demonstrate that the models achieve high accuracy in cyclone classification and low Root Mean Square Error (RMSE) in cyclone intensity estimation. This study provides insights into the potential of CNN architecture, which can be beneficial in enhancing
 disaster management strategies.
 
 ## Dataset
-The HURSAT data project, managed by the National Centres
-for Environmental Information (NCEI), captures infrared
-satellite imagery of cyclones. This database stores
-cyclone satellite images in NetCDF file format. The centre
-of each cyclone was in the middle of each image. HURSATB1
-data are derived from International Satellite Cloud Climatology
-Project (ISCCP) B1 data. The HURSAT-B1
-v06 data spans 1978-2015 and provides coverage of global
-TCs at 8-km spatial resolution and 3-hourly temporal resolution.
-For this research, the data is taken from year
-2001 to 2016. There were 14296, 6189, 195 images of
-North Atlantic, North Pacific and North Indian ocean respectively.
-The best track data is sourced from the HURDAT2
-database, supplied by the National Hurricane Center
-(NHC). This database comprehensively documents all identified
-cyclones across various basins, including their wind
-speeds recorded at 6-hour intervals. The best track data of
-North Atlantic Ocean and North Pacific Ocean were taken
-from HURDAT2 database and the best track data of NIO is taken from Indian Meteorological Department (IMD).
+The HURSAT data project, managed by the National Centres for Environmental Information (NCEI), captures infrared
+satellite imagery of cyclones. This database stores cyclone satellite images in NetCDF file format. The centre of each cyclone was in the middle of each image. HURSATB1 data are derived from International Satellite Cloud Climatology Project (ISCCP) B1 data. The HURSAT-B1 v06 data spans 1978-2015 and provides coverage of global TCs at 8-km spatial resolution and 3-hourly temporal resolution. For this research, the data is taken from year 2001 to 2016. There were 14296, 6189, 195 images of North Atlantic, North Pacific and North Indian ocean respectively. The best track data is sourced from the HURDAT2 database, supplied by the National Hurricane Center (NHC). This database comprehensively documents all identified cyclones across various basins, including their wind speeds recorded at 6-hour intervals. The best track data of North Atlantic Ocean and North Pacific Ocean were taken from HURDAT2 database and the best track data of NIO is taken from Indian Meteorological Department (IMD).
+
+## Methodology
+TC images are downloaded from 2001 to 2016 into compressed zip files based on different basins, filtering only the images of cyclones for which the wind speed labels are present. The files are downloaded in NetCDF format which holds the satellite images. A CNN model is trained after data processing. Testing is done using k-fold testing. The most valuable information about a cyclone’s intensity is near the centre. The satellite images undergo cropping to eliminate the outer regions of the cyclone captured in the image. After reading the satellite image from its NetCDF file and converting it into a NumPy array, the images are
+then cropped to a 50-by-50-pixel square. This data reduction is implemented to streamline the data augmentation and model training processes, optimizing computational efficiency. The corresponding labels are stored in NumPy files. To align satellite images with their respective wind speeds, a merging process is performed between HURSAT and HURDAT2 datasets. While each satellite image file provides information about the cyclone’s name, data, and time, it lacks details on the cyclone’s wind speed at that specific moment. To address this, the wind speed for each satellite image is retrieved by searching the cyclone’s name, date, and time in the best track dataset. Subsequently, both the satellite image and its corresponding wind speed are simultaneously appended to a NumPy array, effectively labeling the satellite images with its associated wind speed.
+For regression, a custom CNN model is proposed as shown in Table 2 and for classification, LeNet model is used as
+shown in Table 3. The activation function used for convolution layers is ReLU. The custom CNN model uses RMSProp as optimiser, MSE as loss-function, batch size of 64, 4 convolutional layers, image crop size of 50x50 and metrics as MAE. Data Augmentation of images is done using Keras. For 50-75 knots, 75-100 knots, greater than 100 knots, the number of generated images are 2, 6, 12 respectively. Prior to training the model, an examination of the data reveals a substantial disparity, with weak TCs greatly outnumbering strong TCs in the dataset. This is expected, given the higher frequency of tropical depressions and storms compared to cyclones. However, this imbalance in the dataset adversely affects the neural network’s performance on cyclones. To address this, Keras’ Image Data Generator is employed to augment existing cyclone data in the dataset. The incorporation of this augmented data during model training leads to a notable enhancement in performance, particularly in the accurate estimation of wind speeds for cyclones. The augmentation techniques used in this research are - Horizontal flip, Vertical flip, Rotation range: 360, Fill mode: Nearest.
+
+## Conclusion and Future Prospective
+This study seeks to fill the gap in existing research by harnessing the potential of CNN architecture, offering a promising avenue for enhancing disaster management strategies and minimizing the devastating impact of cyclones on lives and property. DL techniques have demonstrated remarkable efficacy in addressing challenging issues across a diverse range of applications in Atmospheric Science and Climate Physics. These often involve data-driven problems related to optimization, classification, and prediction, among others. In instances of severe cyclones and adverse weather conditions, identifying regions where TCs exist and determining their intensity can be challenging. In such contexts, the objective of constructing a DL-based model is to enable the estimation and classification of cyclones based on imagery. This capability can significantly assist weather scientists in detecting points of rapid intensification. The study lacks training data in a wide variety of classes. Efforts can be made to expand the dataset to include a wider range of cyclone images, especially the higher intensity cyclone images, and to cover a longer period of time. The work can be added for visualization and can also be used to predict the cyclone direction, increasing the accuracy by training over wide variety of cyclone data.
